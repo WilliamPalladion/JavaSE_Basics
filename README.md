@@ -1,2 +1,2 @@
 # JavaSE_Basics
-This repository contains the code files for Java basics.
+This repository contains the code files for Java basics. I labeled and sorted each part by numbers, which you can also find notes accompanying these codes in the folder 'Java Notes'. This version is more suitable for beginners who does not have experience in Java before and is familiar with Chinese (since the notes are written in Chinese). Hope these code files and notes will be helpful for you, thank you. -- Yanbo 
