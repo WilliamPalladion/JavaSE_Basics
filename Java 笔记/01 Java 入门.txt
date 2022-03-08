@@ -1,0 +1,200 @@
+1.1 Java 简介
+
+1995年由SUN（Stanford University Network）推出的一门高级编程语言, 2009年被Oracle收购至今
+
+Java之父：James Gosling
+
+Java 技术体系平台:
+Java SE（standard edition）标准版 -- 核心基础Java，提供完整API
+Java EE （Enterprise edition）企业版 -- 大型互联网企业级解决方案 (充分认可)
+Java ME （Micro edition）小型版 -- 移动应用的解决方案 (认可度较低)
+
+
+1.2 Java 快速入门
+
+1.2.1 开发环境配置
+
+JDK: Java Development Kit (Java开发者工具包)
+
+LTS: Long-term support (长期支持版) e.g. JDK 8.0, 11.0, 17.0
+
+# 如何验证JDK安装成功
+
+验证Java\jdk-17\bin目录下两个文件：java.exe, javac.exe
+
+cmd -> 输入java, javac
+    -> java -version, javac -version
+	-> 版本号一致则安装成功
+	
+java.exe: 执行工具
+javac.exe: 编译工具
+
+# Java是高级语言，计算机底层硬件是不能识别的，必须先由javac编译工具进行编译，再通过java执行工具执行
+
+# 常用命令
+
+盘符D:, C:
+dir
+cd (tab键可以补全)： cd.. 返回上一级目录
+                     cd \ 返回盘符根目录
+cls: 清屏
+
+
+1.2.2 入门程序 Hello World
+
+# Java程序开发的三个步骤
+
+1. 编写代码 -> HelloWorld.java (源代码文件) -> 
+2. 编译代码(javac) -> HelloWorld.class (字节码文件) ->
+3. 运行代码 (java)
+
+# 文件名称必须与代码中的类一致 HelloWorld.java
+
+public class HelloWorld{
+   	public static void main(String[] args){
+		System.out.println("Hello World");
+	}
+}
+
+# 先cd到HelloWorld.java文件目录下，输入以下命令
+
+javac HelloWorld.java  # 编译产生HelloWorld.class文件
+java HelloWorld   # 打印 Hello World
+
+# 执行时不要带.class否则会报错
+# JDK 11 开始支持java直接运行源代码文件
+
+java HelloWorld.java
+# Hello World
+
+# 区别在于这种方法不会产生一个.class文件
+
+
+
+1.2.3 Java 执行原理
+
+机器语言: 010100101.....
+计算机底层都是硬件电路，可以通过01表示不通电/通电
+
+机器语言 -> 汇编语言 -> 高级语言 (翻译成底层能够理解的语言)
+
+
+
+
+1.2.4 JDK 的构成 & 跨平台原理
+
+# JRE (Java Runtime Environment): Java运行环境 = JVM + 核心类库
+JVM (Java Virtual Machine): Java虚拟机，真正运行Java程序的地方
+核心类库：Java内置程序给程序员调用的
+
+# JDK = JRE + 开发工具
+开发工具： java, javac, ...
+
+# 运行过程
+javac编译xxx.java -> java送xxx.class进入虚拟机JVM -> JVM调用核心类库运行程序
+
+
+# 跨平台原理：一次编译，处处可用
+
+Java程序 -> javac编译 -> Class文件 -> 不同平台的虚拟机 (Windows, MacOS, Linux)
+
+
+
+
+1.2.5 Path环境变量 & JAVA_HOME
+
+Path环境变量用于记住程序路径，方便在命令行窗口的任意目录启动程序
+
+# 大部分程序放在bin包下
+
+# 较新版本的JDK会自己配置java, javac的路径到Path环境变量中，因此可以直接使用
+# 但老版本的JDK是没有自动配置的
+
+
+# 配置JAVA_HOME (新版本也不会自动配置！！)
+# JAVA_HOME: 告诉操作系统JDK安装在了哪个位置 (将来其他技术要通过这个环境变量找JDK)
+
+新建 -> JAVA_HOME D:\Java\jdk-17.0.2
+
+# Path中可以这样写更方便后续版本变化
+
+%JAVA_HOME%\bin
+
+
+
+
+1.2.6 IDE 开发工具
+
+IDE (Integrated Development Environment): 集成开发环境
+
+# 把代码编写、编译、执行等多种功能综合一体的开发工具
+# e.g. Eclipse, MyEclipse, IntelliJ IDEA, Jbuilder, NetBeans, ...
+
+# IntelliJ IDEA 业界公认最优秀的Java开发工具 (简称IDEA)
+
+
+# IDEA 项目结构
+
+Project (项目/工程) -> Module (模块) -> Package (包) -> Class (类)
+
+# e.g. (建筑工程) 小区 -> 单元 -> 每层楼 -> 每间房
+# 类就是具体的程序
+
+# 先建立project, 再建立module，在src (source源代码)下建立package，最后建立class
+# package一般命名为公司域名的倒写 + 技术名称: e.g. com.itheima.name
+
+# IDEA 快捷键
+
+* main method: main/psvm + enter/tab
+* ctrl + z: 撤销操作
+* System.out.println(): 1) sout + "content"
+*                       2) "content".sout + enter
+* ctrl + D: 复制当前行
+* ctrl + Y: 删除当前行 (ctrl + X 剪切也可以达到一样效果, 甚至更快)
+* ctrl + alt + L: 调整代码格式为规范化 (e.g. 缩进，空格，etc.)
+* alt + shift + ↑/↓: 上下移动代码
+* ctrl + /: 单行注释
+* ctrl + shift + /: 多行注释
+
+
+# IDEA 其他常用操作
+
+# 修改模块：一般是模块名和磁盘里的文件夹名都修改，选Rename module and directory
+
+# 导入模块：
+
+1）关联导入
+File -> New -> Module from Existing Sources -> 输入模块的路径
+     -> 注意找黑点文件 .iml (一定要导入这个！！)
+# 这种导入的问题在于源文件的路径可能不一样，那么一旦源文件被删除，整个模块就会丢失
+
+2）直接导入
+
+# 我们不如直接先新建一个module, 然后把需要的模块下的内容全部复制到新建模块的src包下
+
+
+# 删除模块
+
+# 如果直接 Remove module 那么只是在工程里删除了，磁盘里还有源文件
+# 可以考虑直接从磁盘删除，或者在上方的模块名处右击，这时候会显示 delete, 但其实根本没删除干净
+# 你要从 .idea 包下打开 modules.xml 文件， 删除 <module fileurl = ...> 关于这个包的这一行
+# 但其实这样还不行！你必须重启IDEA才能真正删干净module，非常麻烦，所以还是直接磁盘删除吧
+
+# 打开工程也要找到黑点文件打开
+# 要切换工程可以点击 open recent
+
+
+
+# Debug工具
+
+# IDEA自带的断点调试(排错)工具，可以控制代码从断点开始一行一行执行
+
+# 步骤：在需要控制的代码行左侧点击，形成断点
+        右击选择 Debug xxx
+		控制代码一行一行往下执行
+
+# 点击左侧的 Resume Program 可以直接执行完程序
+# 可以在想继续停下的代码处再打一个断点，然后点 Resume
+
+# 若要观察内部方法，要点击 Step into
+# 若想跳出方法执行，直接点击 Step out

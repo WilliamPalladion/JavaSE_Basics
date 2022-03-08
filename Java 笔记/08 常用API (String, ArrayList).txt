@@ -1,0 +1,170 @@
+08 常用API (String, ArrayList)
+
+API (Application Programming Interface) 应用程序编程接口
+# Java写好的技术(功能代码)，可以直接调用
+
+1) String 类
+
+String类定义的变量可以用于存储字符串，同时String类提供了很多操作字符串的功能，可以直接调用
+e.g. 用户登录与正确的用户名密码比较，屏蔽祖安词汇，搜索引擎提取关键字
+
+# Content: String定义变量存储字符串，内存原理，常用API，实际案例
+
+
+2) ArrayList 类
+
+ArrayList代表集合类，集合是一种容器，与数组类似，但集合的大小是不固定的
+e.g. 购物车商品
+
+# Content: 创建对象，常用API，存储自定义对象(原理)，实际案例
+
+
+
+
+8.1 String 类概述 & 创建
+
+# java.lang.String 类代表字符串，String类定义的变量可以用于指向字符串对象
+# Java程序中的所有字符串文字都为此类的对象
+
+# String类常被称为 不可变字符串类型，它的对象在创建后不能被更改
+String name = "传智";
+name += "教育";
+name += "中心";
+System.out.println(name); // 传智教育中心
+
+// 以 "" 方式给出的字符串对象，在字符串常量池中存储 (堆内存中)，因此变量name存储的其实是对象的地址
+// 但这里特殊的点在于println打印出来就是字符串对象而不是地址，这是因为中间还涉及了其他转换，在后期继承的部分会深入解释
+// 为什么我们还是说它是不可变字符串类型？ 因为 "传智", "教育", "中心" 三个字符串对象都在字符串常量池中没有改变
+// 但每一次运算过后，name就会指向一个新的 += 运算过后的对象："传智" -> "传智教育" (堆内存) -> "传智教育" (堆内存)
+// i.e. 对象没有改变，但变量会不断指向新的对象，String变量每次的修改其实都是产生并指向了新的字符串对象
+
+
+# 创建字符串对象的方式
+
+1) 直接使用 "" 定义 (推荐)
+
+2) 通过String类的构造器创建对象
+
+public String(): 创建一个空白字符串对象，无内容
+public String(String original): 根据传入的字符串内容创建对象
+public String(char[] chs): 根据字符数组的内容创建对象
+public String(byte[] chs): 根据字节数组的内容创建对象 
+
+
+# 区别
+# 以 "" 方式给出的字符串对象，在字符串常量池中存储，且相同内容只会存储一份(节省内存资源)
+# 通过构造器new对象，每new一次都会产生一个新的对象，放在堆内存中
+
+
+# 常见面试题
+
+1) 
+String s2 = new String("abc"); 
+// 这句代码实际创建了两个对象！"abc"创建在字符串常量池, new一个对象在堆内存
+
+String s1 = "abc"; // 没有创建对象！因为常量池中已经有了
+System.out.println(s1 == s2); // false, s1指向的对象在堆内存，s2指向的对象在常量池
+
+
+2)
+String s1 = "abc"; // s1 在字符串常量池中
+String s2 = "ab";
+String s3 = s2 + "c";
+System.out.println(s1 == s3); // false, s3是经过运算得来，在堆内存中
+
+
+3)
+String s1 = "abc";
+String s2 = "a" + "b" + "c";
+System.out.println(s1 == s2); // true
+# Java存在编译优化机制，程序在编译class文件时 "a" + "b" + "c" 时会直接转为 "abc"
+# 可以降低运行的压力，提高性能
+
+
+8.2 String 类常用API
+
+# 字符串比较功能
+
+		// 比对登陆用户名和密码
+        // 正确值
+        String okName = "william";
+        String okPassword = "123456";
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("登录名：");
+        String name = sc.next();
+        System.out.println("登录密码：");
+        String password = sc.next();
+
+        // 判断用户输入的登陆名和密码与正确内容是否相同
+        if (name == okName && password == okPassword){
+            System.out.println("登录地址");
+        } else {
+            System.out.println("用户名或密码错误");
+        }
+        // 这样的比对会失败，原因是在比对两者的地址，而一个在常量池中，一个在堆内存中
+
+# 字符串的内容比较不适合使用 "=="
+# "==" 适用于基本数据类型
+
+# String类提供的 "equals" 比较：只关心内容一致，不关心地址
+
+public boolean equals(Object anObject)：精确比较
+public boolean equalsIgnoreCase(String anotherString)：忽略大小写
+
+语法：String.equals()
+
+
+public int length(): 返回字符串长度
+public char charAt(int index): 获取index索引位置的字符
+public char[] toCharArray(): 将当前字符串转换成字符数组返回
+public String substring(int beginIndex, int endIndex): 截取字符串(包前不包后)，返回一个新字符串
+public String substring(int beginIndex): 从索引处一直截取到末尾
+
+public String replace(CharSequence target, CharSequence replacement):
+将字符串中的旧值替换成新值，得到新字符串
+
+public boolean contains(CharSequence s): 是否包含具体字符串(精确比对)
+public boolean startsWiths(String prefix)：以什么开始
+public String[] split(String regex): 根据传入的规则切割字符串，得到字符串数组返回
+
+
+
+
+8.3 ArrayList
+
+# 集合与数组类似，也是一种存储数据的容器
+
+# 数组：定义完成后，类型确定，长度固定 -> 在个数不能确定，且要进行增删操作时不太方便
+# 集合的大小不固定，启动后可以动态变化，类型也可以不固定
+# 集合提供很多便利的API
+
+# ArrayList集合：集合的一种，支持索引
+
+public ArrayList(); // 创建一个空的集合对象
+
+# 添加元素
+public boolean add(E e): 将指定元素插入到集合的末尾
+public void add(int index, E element): 在集合的指定位置插入指定元素
+
+
+
+# ArrayList 对泛型的支持
+
+# Java是一种强类型的语言，一般它不是很希望开发者在一个集合里存放多种元素
+
+# ArrayList<E>: 泛型类，可以在编译阶段约束集合对象只能操作某种数据类型
+e.g. ArrayList<String> (字符串类型); ArrayList<Integer> (整数类型)
+
+# 注意：<>中只能存储引用类型，不支持基本数据类型 (int, short, ... -> Integer)
+# 是否支持泛型，就看有没有 <E>
+
+
+
+# ArrayList 常用API
+
+public E get(int index): 返回指定索引处的元素
+public int size(): 返回集合的元素个数
+public E remove(int index): 删除指定索引处的元素，返回被删除的元素
+public boolean remove(Object o): 删除指定的元素，返回删除是否成功
+public E set(int index, E element): 修改指定索引处的元素，返回被修改的元素

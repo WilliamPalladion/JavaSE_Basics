@@ -1,0 +1,179 @@
+04 程序流程控制
+
+# 流程控制语句：控制程序的执行流程
+
+顺序结构：程序默认流程
+分支结构：if, switch
+循环结构：for, while, do...while
+
+
+4.1 分支结构
+
+4.1.1 if 分支结构
+
+if (条件表达式){
+	语句体;
+}
+
+
+if (条件表达式){
+	语句体1;
+} else {
+	语句体2;
+}
+
+
+if (条件表达式1){
+	语句体1;
+} else if (条件表达式2){
+	语句体2;
+} else if (条件表达式3){
+	语句体3;
+} ...
+else {
+	语句体n;
+}
+
+
+4.1.2 switch分支结构
+
+# switch分支: 匹配条件执行分支，适合做值匹配的分支选择，结构清晰
+
+switch (表达式){
+	case 值1:
+		code;
+		break;
+	case 值2:
+		code;
+		break:
+	...
+	case 值n:
+		code;
+		break;
+	default:
+		code;
+}
+
+# 执行流程：
+1）先执行表达式的值，拿着这个值与case后的值进行匹配；
+2）匹配到哪个case的值就执行哪个case，遇到break就跳出整个switch分支；
+3）如果case后的值都不匹配则执行default代码
+
+# if更适合做区间匹配，switch更适合做值匹配
+
+# switch 注意点：
+1）表达式类型只能是byte, short, int, char, JDK5开始支持枚举，JDK7开始支持String
+   不支持double, float, long
+   (Why? double和float在底层的存储是不精确的，long是完全没有必要，几百个分支已经很多了)
+   
+2）Case给出的值不允许重复，且只能是字面量，不能是变量；
+
+3）不要忘记写break，否则会出现穿透现象
+
+
+# 穿透现象：
+如果没有代码执行到没有写break的case块，执行完后将直接进入下一个case块执行代码
+(且不进行任何匹配)，直到遇到break才会跳出分支
+
+
+# 存在多个Case分支的功能代码一致时，可以利用穿透性把流程集中到同一处来简化代码
+switch (month){
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+			System.out.println(month + "月是31天");
+            break;
+}
+
+
+
+4.2 循环结构
+
+4.2.1 for 循环
+
+for (初始化语句; 循环条件; 迭代语句) {
+     循环体语句;
+}
+
+初始化语句 -> 循环条件  true -> 循环体语句 -> 迭代语句 -> 循环条件 ...
+                        false -> 结束循环 
+						
+						
+4.2.2 while 循环
+
+初始化语句;
+while (循环条件){
+	循环体语句;
+	迭代语句;
+}
+
+# 知道循环几次用for; 不知道循环几次用while
+
+
+
+4.2.3 do-while 循环
+
+do {
+	循环体语句;
+	迭代语句;
+} while (循环条件);
+
+# do-while: 一定会先执行一次循环体
+# e.g. 抢票软件
+
+
+
+4.2.4 死循环
+
+# 死循环在服务器中会经常使用
+
+          for (;;){
+//            System.out.println("Hello World");
+//        }
+
+# 经典写法
+//        while (true){
+//            System.out.println("Hello World"); // Unreachable, 因为上一个循环是死循环，永远也执行不到这
+//        }
+
+//        do {
+//            System.out.println("Hello World");
+//        } while (true);
+
+
+
+
+4.2.5 嵌套循环
+
+# 循环中又包含一个循环：外部循环一次，内部循环全部执行完一次
+
+
+
+4.2.6 跳转关键字：break, continue
+
+# break: 跳出并结束当前所在循环的所有后续执行
+# continue: 跳出所在循环的当次执行，进行下一次循环
+
+# 注意事项：
+break只能用于结束所在循环，或者结束所在switch分支的执行; break不能结束if;
+continue: 只能在循环中使用
+
+# 可以使用 OUT 来跳出多层循环
+# 在想要跳出循环的地方加入 OUT: 标签，同时写break OUT/continue OUT; 
+
+
+
+
+# Random 类
+
+import java.util.Random
+
+# 生成随机数
+Random r = new.Random();
+int number = r.nextInt(10);
+
+# nextInt(n): 生成0~(n-1)之间的随机整数
