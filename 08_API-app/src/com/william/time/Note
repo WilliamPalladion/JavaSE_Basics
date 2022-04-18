@@ -1,0 +1,11 @@
+* 从Java 8 开始，java.time包提供了新的日期和时间API，主要类型有：
+LocalDate: 不包含具体时间的日期
+LocalTime: 不包含日期的时间
+LocalDateTime: 包含日期和时间
+Instant: 时间戳
+DateTimeFormatter: 用于做时间的格式化与解析
+Duration: 用于计算两个”时间”的间隔
+Period: 用于计算两个”日期”的间隔
+
+* 新API严格区分了时刻、本地日期、本地时间，且对日期和时间的运算更加方便
+* 新API的类型几乎全部是不变类型(类似String)，可以放心使用不修改原对象
