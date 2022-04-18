@@ -1,0 +1,354 @@
+08 常用API (String, ArrayList)
+
+API (Application Programming Interface) 应用程序编程接口
+# Java写好的技术(功能代码)，可以直接调用
+
+1) String 类
+
+String类定义的变量可以用于存储字符串，同时String类提供了很多操作字符串的功能，可以直接调用
+e.g. 用户登录与正确的用户名密码比较，屏蔽祖安词汇，搜索引擎提取关键字
+
+# Content: String定义变量存储字符串，内存原理，常用API，实际案例
+
+
+2) ArrayList 类
+
+ArrayList代表集合类，集合是一种容器，与数组类似，但集合的大小是不固定的
+e.g. 购物车商品
+
+# Content: 创建对象，常用API，存储自定义对象(原理)，实际案例
+
+
+
+
+8.1 String 类概述 & 创建
+
+# java.lang.String 类代表字符串，String类定义的变量可以用于指向字符串对象
+# Java程序中的所有字符串文字都为此类的对象
+
+# String类常被称为 不可变字符串类型，它的对象在创建后不能被更改
+String name = "传智";
+name += "教育";
+name += "中心";
+System.out.println(name); // 传智教育中心
+
+// 以 "" 方式给出的字符串对象，在字符串常量池中存储 (堆内存中)，因此变量name存储的其实是对象的地址
+// 但这里特殊的点在于println打印出来就是字符串对象而不是地址，这是因为中间还涉及了其他转换，在后期继承的部分会深入解释
+// 为什么我们还是说它是不可变字符串类型？ 因为 "传智", "教育", "中心" 三个字符串对象都在字符串常量池中没有改变
+// 但每一次运算过后，name就会指向一个新的 += 运算过后的对象："传智" -> "传智教育" (堆内存) -> "传智教育" (堆内存)
+// i.e. 对象没有改变，但变量会不断指向新的对象，String变量每次的修改其实都是产生并指向了新的字符串对象
+
+
+# 创建字符串对象的方式
+
+1) 直接使用 "" 定义 (推荐)
+
+2) 通过String类的构造器创建对象
+
+public String(): 创建一个空白字符串对象，无内容
+public String(String original): 根据传入的字符串内容创建对象
+public String(char[] chs): 根据字符数组的内容创建对象
+public String(byte[] chs): 根据字节数组的内容创建对象 
+
+
+# 区别
+# 以 "" 方式给出的字符串对象，在字符串常量池中存储，且相同内容只会存储一份(节省内存资源)
+# 通过构造器new对象，每new一次都会产生一个新的对象，放在堆内存中
+
+
+# 常见面试题
+
+1) 
+String s2 = new String("abc"); 
+// 这句代码实际创建了两个对象！"abc"创建在字符串常量池, new一个对象在堆内存
+
+String s1 = "abc"; // 没有创建对象！因为常量池中已经有了
+System.out.println(s1 == s2); // false, s1指向的对象在堆内存，s2指向的对象在常量池
+
+
+2)
+String s1 = "abc"; // s1 在字符串常量池中
+String s2 = "ab";
+String s3 = s2 + "c";
+System.out.println(s1 == s3); // false, s3是经过运算得来，在堆内存中
+
+
+3)
+String s1 = "abc";
+String s2 = "a" + "b" + "c";
+System.out.println(s1 == s2); // true
+# Java存在编译优化机制，程序在编译class文件时 "a" + "b" + "c" 时会直接转为 "abc"
+# 可以降低运行的压力，提高性能
+
+
+8.2 String 类常用API
+
+# 字符串比较功能
+
+		// 比对登陆用户名和密码
+        // 正确值
+        String okName = "william";
+        String okPassword = "123456";
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("登录名：");
+        String name = sc.next();
+        System.out.println("登录密码：");
+        String password = sc.next();
+
+        // 判断用户输入的登陆名和密码与正确内容是否相同
+        if (name == okName && password == okPassword){
+            System.out.println("登录地址");
+        } else {
+            System.out.println("用户名或密码错误");
+        }
+        // 这样的比对会失败，原因是在比对两者的地址，而一个在常量池中，一个在堆内存中
+
+# 字符串的内容比较不适合使用 "=="
+# "==" 适用于基本数据类型
+
+# String类提供的 "equals" 比较：只关心内容一致，不关心地址
+
+public boolean equals(Object anObject)：精确比较
+public boolean equalsIgnoreCase(String anotherString)：忽略大小写
+
+语法：String.equals()
+
+
+public int length(): 返回字符串长度
+public char charAt(int index): 获取index索引位置的字符
+public char[] toCharArray(): 将当前字符串转换成字符数组返回
+public String substring(int beginIndex, int endIndex): 截取字符串(包前不包后)，返回一个新字符串
+public String substring(int beginIndex): 从索引处一直截取到末尾
+
+public String replace(CharSequence target, CharSequence replacement):
+将字符串中的旧值替换成新值，得到新字符串
+
+public boolean contains(CharSequence s): 是否包含具体字符串(精确比对)
+public boolean startsWiths(String prefix)：以什么开始
+public String[] split(String regex): 根据传入的规则切割字符串，得到字符串数组返回
+
+
+
+
+8.3 ArrayList
+
+# 集合与数组类似，也是一种存储数据的容器
+
+# 数组：定义完成后，类型确定，长度固定 -> 在个数不能确定，且要进行增删操作时不太方便
+# 集合的大小不固定，启动后可以动态变化，类型也可以不固定
+# 集合提供很多便利的API
+
+# ArrayList集合：集合的一种，支持索引
+
+public ArrayList(); // 创建一个空的集合对象
+
+# 添加元素
+public boolean add(E e): 将指定元素插入到集合的末尾
+public void add(int index, E element): 在集合的指定位置插入指定元素
+
+
+
+# ArrayList 对泛型的支持
+
+# Java是一种强类型的语言，一般它不是很希望开发者在一个集合里存放多种元素
+
+# ArrayList<E>: 泛型类，可以在编译阶段约束集合对象只能操作某种数据类型
+e.g. ArrayList<String> (字符串类型); ArrayList<Integer> (整数类型)
+
+# 注意：<>中只能存储引用类型，不支持基本数据类型 (int, short, ... -> Integer)
+# 是否支持泛型，就看有没有 <E>
+
+
+
+# ArrayList 常用API
+
+public E get(int index): 返回指定索引处的元素
+public int size(): 返回集合的元素个数
+public E remove(int index): 删除指定索引处的元素，返回被删除的元素
+public boolean remove(Object o): 删除指定的元素，返回删除是否成功
+public E set(int index, E element): 修改指定索引处的元素，返回被修改的元素
+
+
+
+
+
+8.4 其他常用API：StringBuilder, Math, System, BigDecimal
+
+3）StringBuilder
+
+# 字符串类原本是不可变的，但StringBuilder提供了一个可变的字符串类，相当于只在一个对象容器中操作
+# 作用：提高字符串的操作效率，如拼接、修改等
+
+# 构造器
+public StringBuilder(): 创建一个空白的可变字符串对象，不包含任何内容
+public StringBuilder(String str): 创建一个指定内容的可变字符串对象
+
+# 常用方法：
+public StringBuilder append(任何类型): 添加数据并返回StringBuilder对象本身
+public StringBuilder reverse(): 内容反转
+public int length(): 对象内容长度
+public String toString(): 将StringBuilder转换为String
+
+
+# String类拼接字符串原理：
+String s1 = "a";
+String s2 = s1 + "b";
+String s3 = s2 + "c";
+
+# 在栈内存中创建变量，堆内存中字符串常量池产生"a", "b", 要拼接时先是new StringBuilder()，产生一个 "ab" 对象，
+  再通过toString()方法返回String类型的对象指向s2, ...
+
+# 一个加号，堆内存中产生两个对象，因此效率低下；而StringBuilder中只产生一个对象
+
+
+
+4） Math
+
+# Math类是一个工具类(类中都是静态static方法)，只提供基本数学运算的方法，没有提供公开的构造器；
+
+public static int abs(int a): 绝对值
+public static double ceil(double a): 向上取整
+public static double floor(double a): 向下取整
+public static int round(float a): 四舍五入
+public static int max(int a, int b): 两个int值中较大的值
+public static double pow(double a, double b): a^b
+public static double random(): 返回范围为[0.0, 1.0)的随机值
+
+
+
+5） System
+
+# System类的功能是通用的，直接用类名调用，所以不能被实例化
+
+public static void exit(int status): 终止当前运行的Java虚拟机，零是正常终止，非零表示异常终止
+public static long currentTimeMillis(): 返回当前系统的时间毫秒值形式
+public static void arraycopy(原数组，起始索引，目的地数组，起始索引，拷贝个数): 拷贝数组
+
+
+
+6） BigDecimal
+
+# 用于解决浮点型运算精度失真的问题
+
+# 创建BigDecimal对象封装浮点型数据 (最好的是调用方法)
+new BigDecimal(String str)
+public static BigDecimal valueOf(double val)
+
+public BigDecimal add(BigDecimal b)
+public BigDecimal subtract(BigDecimal b)
+public BigDecimal multiply(BigDecimal b)
+public BigDecimal divide(BigDecimal b)
+public BigDecimal divide(BigDecimal b, 精确位数，舍入模式)
+
+
+
+
+
+8.5 日期时间相关API
+
+7） Date
+
+# Date类的对象在Java中代表当前所在系统的此刻日期时间
+
+# 构造器：
+public Date(): Date对象，代表系统当前此刻日期时间
+public Date(long time): 把时间毫秒值转成Date日期对象
+
+# 常用方法：
+public long getTime(): 获取时间对象的毫秒值
+public void setTime(long time): 设置日期对象的时间为当前时间毫秒值对应的时间
+
+
+
+8） SimpleDateFormat
+
+# 可以把Date对象/时间毫秒值 格式化 成我们需要的时间形式，也可以将字符串的时间形式解析成日期对象
+# 格式：y M d H m s (年月日时秒分)
+
+# 构造器
+public SimpleDateFormat(): 默认格式创建一个SimpleDateFormat对象
+public SimpleDateFormat(String pattern): 指定格式创建一个SimpleDateFormat对象
+
+# 常用格式化/解析字符串方法：
+public final String format(Date date): 将日期格式转化成日期/时间字符串
+public final String format(Object date): 将时间毫秒值转化成日期/时间字符串
+public Date parse(String source): 根据给定的字符串解析文本生成日期对象
+
+
+
+9） Calendar
+
+# Calendar代表了系统此刻日期对应的日历对象
+# Calendar是一个抽象类，不能直接创建对象；且日历是可变日期对象，一旦修改其对象本身表示的时间将变化
+
+# 调用方法来获取一个对象(类似之前说的单例，其实也是一种多态的写法)：Calendar.getInstance()
+
+# 常用方法：
+public int get(int field): 取日期中的某个字段信息
+public void set(int field, int value): 修改日期中的某个字段信息
+public void add(int field, int value): 为日期的某个字段增加/减少指定的值
+public final Date getTime(): 拿到此刻日期对象
+public long getTimeInMillis: 拿到此刻时间的毫秒值
+
+
+
+# 从Java 8 开始，java.time包提供了新的日期和时间API，主要类型有：
+LocalDate: 不包含具体时间的日期
+LocalTime: 不包含日期的时间
+LocalDateTime: 包含日期和时间
+Instant: 时间戳
+DateTimeFormatter: 用于做时间的格式化与解析
+Duration: 用于计算两个”时间”的间隔
+Period: 用于计算两个”日期”的间隔
+
+# 新API严格区分了时刻、本地日期、本地时间，且对日期和时间的运算更加方便
+# 新API的类型几乎全部是不变类型(类似String)，可以放心使用不修改原对象
+
+
+
+10） LocalDate、LocalTime、LocalDateTime
+
+# 构造对象 (调用方法)：
+public static xxx now(): 根据当前日期/时间创建对象
+public static xxx of(...): 指定日期/时间创建对象 (e.g. LocalDate.of(2099, 11, 11))
+
+# 修改/比较时间相关方法：
+# LocalDateTime 综合了 LocalDate 和 LocalTime 中的方法，这些方法返回的是一个新的实例引用对象 (不可变类型)
+plusDays, plusWeeks, plusMonths, plusYears: 添加时间
+minusDays, minusWeeks, minusMonths, minusYears: 减去时间
+withDayOfMonth, withDayOfYear, withMonth, withYear: 直接修改为指定的值并返回新的对象
+isBefore, isAfter, equals
+
+
+11） Instant
+
+# JDK 8 获取时间戳(年月日时秒分)，且功能非常丰富；
+# Instant类由now()方法返回当前时间戳，与java.util.Date类非常类似，实际上Instant就是类似JDK 8以前的Date
+# Instant和Date这两个类可以互相转换: Date.from(instant), date.toInstant()
+
+
+
+12） DateTimeFormatter
+
+# JDK 8 引入的全新的日期与时间格式器；正反都能调用format方法
+
+# 常用方法：
+DateTimeFormatter.ofPattern();
+format(): 正向逆向均可
+LocalDate.parse(String str, DateTimeFormatter dtf): 解析字符串时间成为LocalDateTime对象
+
+
+13） Duration/Period
+
+# java.time.Period: 计算日期间隔差异，主要用于 LocalDate 之间的比较
+# 主要方法： getYears, getMonths, getDays, between
+
+# java.time.Duration: 计算时间间隔差异，主要用于 LocalDateTime/Instant 之间的比较
+# 主要方法：between, toDays, toHours, toMinutes, toMillis, toNanos
+
+
+
+14）ChronoUnit
+
+# java.time.temporal.ChronoUnit: 在单个时间单位内测量一段时间，可以用于比较所有的时间单位的最全工具类
